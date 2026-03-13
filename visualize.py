@@ -1,12 +1,4 @@
-# python visualize.py
-
-# Validate the sequence — check if the input contains only A, T, G, C letters
-# Count nucleotides — count how many A, T, G, C are in the sequence
-# Calculate GC content — (G+C) divided by total length, multiplied by 100
-# Get complement strand — replace each letter: A→T, T→A, G→C, C→G
 import re
-
-# seq=input("Enter Sequence: ")
 
 def get_complement(seq):
     length=len(seq)
@@ -34,8 +26,6 @@ def get_nucleotide_freq(seq):
         "C": seq.count("C"),
     }
 
-# def get_gc_content(freq, length):
-    return round((freq["G"] + freq["C"]) / length * 100, 2)
 
 def get_at_gc_ratio(freq):
     gc = freq["G"] + freq["C"]
@@ -83,24 +73,6 @@ def nucleotide_freq(seq):
             freq["G"]+=1
     return freq
 
-# def get_at_gc_ratio(freq):
-#    at = freq["A"]+freq["T"]
-#    gc = freq["G"]+freq["C"]
-#    ratio=at/gc
-#    return ratio
-# def findMotif(seq,motif):
-#     # print(seq.index(motif))
-#         seq=seq
-
-# length=len(validatedSeq)
-# gc_content= (freq["G"]+freq["C"])/length*100
-# print(gc_content)
-
-# replacedString= get_complement(validatedSeq)
-# print(replacedString)
-
-# index= findMotif(replacedString, "ATG")
-# print(index)
 
 def findMotif(seq,pattern):
     pos=[]
@@ -108,10 +80,6 @@ def findMotif(seq,pattern):
     for match in re.finditer(pattern,seq):
         pos.append(match.start())
     return pos
-
-# print(findMotif(seq,r"(?=(AT[GC]))"))
-input="AT[GC]"
-# print(f'(?=({input}))')
 
 def calculate_gc_content(sequence):
     """Calculates the GC content of a DNA sequence."""
@@ -122,7 +90,6 @@ def calculate_gc_content(sequence):
         return 0.0
     return (g_count + c_count) / len(sequence) * 100.0
 
-
 def sliding_window(seq,window,step=1):
     gc_values=[]
     pos=[]
@@ -132,8 +99,6 @@ def sliding_window(seq,window,step=1):
         gc_values.append(gc_content)
         pos.append(i+1)
     return gc_values,pos
-
-# print(sliding_window(seq,2,1))
 
 def get_annotations(seq):
     annotations=[]
@@ -156,7 +121,3 @@ def get_annotations(seq):
             "Type" : "Stop Codon" 
             })
     return sorted(annotations, key=lambda x: x["Position"])
-    
-  
-
-get_annotations("ATGTAATAGAAA")
