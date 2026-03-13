@@ -1,4 +1,6 @@
 import streamlit as st
+import matplotlib.pyplot as plt
+import visualize
 
 st.title("🧬 DNA Sequence Analyzer (FASTA Input)")
 
@@ -11,7 +13,7 @@ def validate_seq(sequence):
             return False
     return True
 
-def replaceStrain(seq):
+def get_complement(seq):
     length=len(seq)
     complementedStrain=""
 
@@ -29,6 +31,7 @@ def replaceStrain(seq):
 if uploaded_file:
 
     content = uploaded_file.getvalue().decode("utf-8").splitlines()
+    motif = uploaded_file.getvalue().decode("utf-8").splitlines()
 
     sequence = ""
 
@@ -59,17 +62,51 @@ if uploaded_file:
 
     for base in validatedSeq:
         freq[base] += 1
-
-    st.subheader("Nucleotide Count")
-    st.write(freq)
-
     length = len(validatedSeq)
     gc_content = (freq["G"] + freq["C"]) / length * 100
 
     st.subheader("GC Content (%)")
     st.write(round(gc_content, 2))
 
-    replacedString = replaceStrain(validatedSeq)
+    complimentedString = get_complement(validatedSeq)
 
     st.subheader("Complement Strand")
-    st.write(replacedString)
+    st.write(complimentedString)
+
+    # -----------------------------
+    # Bar Chart with Matplotlib
+    # -----------------------------
+    st.subheader("Nucleotide Frequency Bar Chart")
+
+    nucleotides = list(freq.keys())
+    counts = list(freq.values())
+    colors = ['skyblue', 'orange', 'green', 'red']  # Different color for each bar
+
+    plt.figure(figsize=(6,4))
+    plt.bar(nucleotides, counts, color=colors)
+    plt.title("Nucleotide Frequency")
+    plt.xlabel("Nucleotides")
+    plt.ylabel("Counts")
+    plt.ylim(0, max(counts)+5)
+
+    st.pyplot(plt)  # Display the plot in Streamlit
+
+    # -----------------------------
+# Motif Detection Section
+# -----------------------------
+st.subheader("Motif Detection")
+
+motif_pattern = st.text_input("Enter motif pattern (regex allowed)")
+
+if st.button("Search Motif"):
+
+    if motif_pattern.strip() == "":
+        st.warning("Please enter a motif pattern.")
+    else:
+        positions = visualize.findMotif(validatedSeq, motif_pattern)
+
+        if positions:
+            st.success(f"{len(positions)} match(es) found!")
+            st.write("Positions:", positions)
+        else:
+            st.warning("No matches found.")
