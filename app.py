@@ -203,7 +203,7 @@ if st.session_state.analyzed:
         st.markdown(f"<div class='card'><div class='card-label'>Sequence Length</div><div class='card-value'>{length} bp</div></div>", unsafe_allow_html=True)
     with c2:
         gc_class = "gc-low" if gc < 40 else "gc-high" if gc > 60 else "gc-mid"
-        st.markdown(f"<div class='card'><div class='card-label'>GC Content</div><div class='card-value {gc_class}'>{gc}%</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card'><div class='card-label'>GC Content</div><div class='card-value {gc_class}'>{gc :.3f}%</div></div>", unsafe_allow_html=True)
     with c3:
         st.markdown(f"<div class='card'><div class='card-label'>Melting Temp (Tm)</div><div class='card-value'>{tm}°C</div></div>", unsafe_allow_html=True)
     with c4:
