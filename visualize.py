@@ -6,10 +6,10 @@
 # Get complement strand — replace each letter: A→T, T→A, G→C, C→G
 import re
 
-seq=input("Enter Sequence: ")
+# seq=input("Enter Sequence: ")
 
 def get_complement(seq):
-    length-len(seq)
+    length=len(seq)
     complementedStrain=""
 
     for i in range(0,length):
@@ -22,6 +22,33 @@ def get_complement(seq):
         elif seq[i] == "G":
             complementedStrain+="C"
     return complementedStrain
+
+def get_reverse_complement(seq):
+    return get_complement(seq)[::-1]
+
+def get_nucleotide_freq(seq):
+    return {
+        "A": seq.count("A"),
+        "T": seq.count("T"),
+        "G": seq.count("G"),
+        "C": seq.count("C"),
+    }
+
+# def get_gc_content(freq, length):
+    return round((freq["G"] + freq["C"]) / length * 100, 2)
+
+def get_at_gc_ratio(freq):
+    gc = freq["G"] + freq["C"]
+    return "N/A" if gc == 0 else round((freq["A"] + freq["T"]) / gc, 2)
+
+def get_melting_temp(freq):
+    return 2 * (freq["A"] + freq["T"]) + 4 * (freq["G"] + freq["C"])
+
+def get_purine_pyrimidine(freq):
+    return freq["A"] + freq["G"], freq["T"] + freq["C"]
+
+def format_sequence_chunks(seq, chunk=10):
+    return "  ".join([seq[i:i+chunk] for i in range(0, len(seq), chunk)])
 
 def validate_seq(sequence):
     validSeq='ATGC'
@@ -37,35 +64,39 @@ def validate_seq(sequence):
             return sequence
             break
 
-validatedSeq=validate_seq(seq).upper()
-# print(validatedSeq)
+def nucleotide_freq(seq):
+    validatedSeq= validate_seq(seq).upper()
+    freq={
+        "A":0,
+        "T":0,
+        "G":0,
+        "C":0,
+    }
+    for base in validatedSeq:
+        if base == "A":
+            freq["A"]+=1
+        elif base == "T":
+            freq["T"]+=1
+        elif base == "C":
+            freq["C"]+=1
+        elif base == "G":
+            freq["G"]+=1
+    return freq
 
-freq={
-    "A":0,
-    "T":0,
-    "G":0,
-    "C":0,
-}
-
-for base in validatedSeq:
-    if base == "A":
-        freq["A"]+=1
-    elif base == "T":
-        freq["T"]+=1
-    elif base == "C":
-        freq["C"]+=1
-    elif base == "G":
-        freq["G"]+=1
-
+# def get_at_gc_ratio(freq):
+#    at = freq["A"]+freq["T"]
+#    gc = freq["G"]+freq["C"]
+#    ratio=at/gc
+#    return ratio
 # def findMotif(seq,motif):
 #     # print(seq.index(motif))
 #         seq=seq
 
-length=len(validatedSeq)
-gc_content= (freq["G"]+freq["C"])/length*100
+# length=len(validatedSeq)
+# gc_content= (freq["G"]+freq["C"])/length*100
 # print(gc_content)
 
-replacedString= get_complement(validatedSeq)
+# replacedString= get_complement(validatedSeq)
 # print(replacedString)
 
 # index= findMotif(replacedString, "ATG")
@@ -78,9 +109,9 @@ def findMotif(seq,pattern):
         pos.append(match.start())
     return pos
 
-print(findMotif(seq,r"(?=(AT[GC]))"))
+# print(findMotif(seq,r"(?=(AT[GC]))"))
 input="AT[GC]"
-print(f'(?=({input}))')
+# print(f'(?=({input}))')
 
 def calculate_gc_content(sequence):
     """Calculates the GC content of a DNA sequence."""
@@ -124,7 +155,7 @@ def get_annotations(seq):
             "Position" : pos,
             "Type" : "Stop Codon" 
             })
-    print(annotations)
+    return sorted(annotations, key=lambda x: x["Position"])
     
   
 
